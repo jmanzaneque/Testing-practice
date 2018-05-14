@@ -30,7 +30,7 @@ public class Board {
 	public Cell getCell(int cellId) {
 		return cells.get(cellId);
 	}
-
+        
 	public int[] getCellsIfWinner(String label) {
 		
 		int[][] winPositions = { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 },
