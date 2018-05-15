@@ -7,6 +7,7 @@ package SystemTest;
 
 import es.codeurjc.ais.tictactoe.WebApp;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
+import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -58,6 +59,13 @@ public class SeleniumTest {
     
     @Test
     public void testWinnerPlayer1(){
+        /*
+        Se simula el siguiente tablero (gana Jugador 1 (X)):
+            X   X   X
+            O   O   X
+            O   X   O
+        */
+        //Secuencia completa: 0,3,1,4,5,6,7,8,2 (J1-J2-J1-J2 ...)
         String player1Name = "Jugador 1";
         String player2Name = "Jugador 2";
         int[] sequence = {0,3,1,4,5,6,7,8,2};
@@ -68,6 +76,13 @@ public class SeleniumTest {
     
     @Test
     public void testWinnerPlayer2(){
+        /*
+        Se simula el siguiente tablero (gana Jugador 2 (O)):
+            X   O   X
+            X   X   
+            O   O   O
+        */
+        //Secuencia completa: 0,1,2,6,3,7,4,8 (J1-J2-J1-J2 ...)
         String player1Name = "Jugador 1";
         String player2Name = "Jugador 2";
         int[] sequence = {0,1,2,6,3,7,4,8};
@@ -78,6 +93,13 @@ public class SeleniumTest {
     
     @Test
     public void testDraw(){
+        /*
+        Se simula el siguiente tablero (empate):
+            O   X   X
+            X   X   O
+            O   O   X
+        */
+        //Secuencia completa: 1,0,4,7,3,5,8,6,2 (J1-J2-J1-J2 ...)
         String player1Name = "Jugador 1";
         String player2Name = "Jugador 2";
         int[] sequence = {1,0,4,7,3,5,8,6,2};
@@ -90,6 +112,7 @@ public class SeleniumTest {
     
     public String testExec(int [] sequence, String player1Name, String player2Name){
         String url = "http://localhost:8080/";
+        //Entran en la aplicación ambos navegadores
         browser1.get(url);
         browser1.findElement(By.id("nickname")).sendKeys(player1Name);
         browser1.findElement(By.id("startBtn")).click();
@@ -100,7 +123,8 @@ public class SeleniumTest {
         String standardCell = "cell-";
         String actualCell;
         WebDriver currentBrowser;
- 
+        
+        //Reproducción de la secuencia de juego
         for (int i=0; i<sequence.length; i++){
             if((i%2)==0){   //Si es par, le toca al jugador 1, sino, al jugador 2
                 currentBrowser = browser1;
@@ -110,12 +134,16 @@ public class SeleniumTest {
             actualCell = standardCell + sequence[i];
             currentBrowser.findElement(By.id(actualCell)).click();
         }
+        
         //Como el alert se manda a ambos navegadores, comprobaremos si se manda el mismo mensaje a ambos
+        //Para evitar problemas de sincronización, se espera 3 segundos para asegurar que aparece el alert
+        browser1.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+        browser2.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
         String alert2 = browser2.switchTo().alert().getText();
         String alert1 = browser1.switchTo().alert().getText();
-        browser1.switchTo().alert().accept();
-        browser2.switchTo().alert().accept();
+        
         assertEquals(alert1, alert2);
+        //Como hemos comprobado que sean iguales, devolvemos una de las dos
         return alert1;
     }
     
