@@ -20,22 +20,43 @@ public class TicTacToeGame {
                 
 	}
 
-	static class WinnerResult {
+	public static class WinnerResult {
 		boolean win;
 		int[] pos;
 	}
 
-	static class CellMarkedValue implements Serializable {
+	public static class CellMarkedValue implements Serializable {
 		int cellId;
 		Player player;
+
+        public int getCellId() {
+            return cellId;
+        }
+
+        public Player getPlayer() {
+            return player;
+        }
+                
+                
+                
 	}
 
-	static class WinnerValue implements Serializable {
+	public static class WinnerValue implements Serializable {
 		Player player;
 		int[] pos;
+
+        public Player getPlayer() {
+            return player;
+        }
+
+        public int[] getPos() {
+            return pos;
+        }
+                
+                
 	}
 
-	static class Event implements Serializable {
+	public static class Event implements Serializable {
 		EventType type;
 		Object data;
 	}

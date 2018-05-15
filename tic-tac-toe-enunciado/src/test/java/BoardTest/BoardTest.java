@@ -7,14 +7,13 @@ package BoardTest;
 
 import es.codeurjc.ais.tictactoe.Board;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 
 /**
  *
- * @author Jorge
+ * @author Jorge Manzaneque, Steven Córdova
  */
 public class BoardTest {
     
@@ -33,62 +32,66 @@ public class BoardTest {
         board.enableAll();
     }
     
-    @Test 
-    public void testCheckDrawFalse(){
-        //El tablero está incompleto. Lo comprobamos después de introducir nuevos elementos
-        assertFalse(board.checkDraw());
-        board.getCell(0).setValue(labelPlayer1);
-        assertFalse(board.checkDraw());
-        board.getCell(1).setValue(labelPlayer1);
-        assertFalse(board.checkDraw());
-        board.getCell(2).setValue(labelPlayer2);
-        assertFalse(board.checkDraw());
-        board.getCell(3).setValue(labelPlayer2);
-        assertFalse(board.checkDraw());
+    public void fillBoard (int [] sequence){
+        String currentValue;
+        for (int i=0; i<sequence.length; i++){
+            if ((i % 2) ==0){
+                currentValue = labelPlayer1;
+            } else {
+                currentValue = labelPlayer2;
+            }
+            board.getCell(sequence[i]).setValue(currentValue);
+        }
     }
     
-    @Test
-    public void testCheckDrawTrue(){
-        
-        //Cuando todo el tablero está relleno y no hay una fila del mismo jugador, muestra el empate
-        //Player 1: 0,1,5,8. Player 2: 2,3,4,6,7
-        board.getCell(0).setValue(labelPlayer1);
-        board.getCell(1).setValue(labelPlayer1);
-        board.getCell(2).setValue(labelPlayer2);
-        board.getCell(3).setValue(labelPlayer2);
-        board.getCell(4).setValue(labelPlayer2);
-        board.getCell(5).setValue(labelPlayer1);
-        board.getCell(6).setValue(labelPlayer2);
-        board.getCell(7).setValue(labelPlayer2);
-        board.getCell(8).setValue(labelPlayer1);
-        
+    @Test 
+    public void testCheckDraw(){
+        /*
+        Se simula el siguiente tablero (empate):
+            O   X   X
+            X   X   O
+            O   O   X
+        */
+        int [] sequence = {1,0,4,7,3,5,8,6,2};  //Secuencia con la que se completan los huecos del tablero
+        this.fillBoard(sequence);
         assertTrue(board.checkDraw());
         
     }
     
     @Test
-    public void testGetCellsIfWinner(){
+    public void testGetCellsIfWinnerWins1(){
+        /*
+        Se simula el siguiente tablero (gana Jugador 1 (X)):
+            X   X   X
+            O   O   X
+            O   X   O
+        */
+        int [] sequence = {0,3,1,4,5,6,7,8,2};  //Secuencia con la que se completan los huecos del tablero
+        this.fillBoard(sequence);
         int [] a = {0,1,2};
-        //Player 1: 0,1,2,5. Player 2: 3,4,6,7
-        board.getCell(0).setValue(labelPlayer1);
-        assertEquals(board.getCellsIfWinner(labelPlayer1),null);
-        board.getCell(3).setValue(labelPlayer2);
-        assertEquals(board.getCellsIfWinner(labelPlayer2),null);
-        board.getCell(1).setValue(labelPlayer1);
-        assertEquals(board.getCellsIfWinner(labelPlayer1),null);
-        board.getCell(4).setValue(labelPlayer2);
-        assertEquals(board.getCellsIfWinner(labelPlayer2),null);
-        board.getCell(5).setValue(labelPlayer1);
-        assertEquals(board.getCellsIfWinner(labelPlayer1),null);
-        board.getCell(6).setValue(labelPlayer2);
-        assertEquals(board.getCellsIfWinner(labelPlayer2),null);
-        board.getCell(2).setValue(labelPlayer1);
         int [] winnerCells = board.getCellsIfWinner(labelPlayer1);
         assertFalse(winnerCells == null);
         for (int i=0; i<winnerCells.length; i++){
             assertEquals(winnerCells[i], a[i]);
-        }     
-        
+        }   
+    }
+    
+    @Test
+    public void testGetCellsIfWinnerWins2(){
+        /*
+        Se simula el siguiente tablero (gana Jugador 2 (O)):
+            X   O   X
+            X   X   
+            O   O   O
+        */
+        int [] sequence = {0,1,2,6,3,7,4,8};  //Secuencia con la que se completan los huecos del tablero
+        this.fillBoard(sequence);
+        int [] a = {6,7,8};
+        int [] winnerCells = board.getCellsIfWinner(labelPlayer2);
+        assertFalse(winnerCells == null);
+        for (int i=0; i<winnerCells.length; i++){
+            assertEquals(winnerCells[i], a[i]);
+        }   
     }
     
     @After
