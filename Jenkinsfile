@@ -15,7 +15,7 @@ pipeline {
                 if(isUnix()) {
                     sh "cd tic-tac-toe-enunciado ; mvn test"
                 } else {
-                    bat(/${M3_HOME}\bin\mvn -f tic-tac-toe-enunciado\pom.xml test/)
+                    bat(/${M2_HOME}\bin\mvn -f tic-tac-toe-enunciado\pom.xml test/)
                 }
             }
           }
