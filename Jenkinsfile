@@ -15,7 +15,7 @@ pipeline {
                 if(isUnix()) {
                     sh "cd tic-tac-toe-enunciado ; mvn test"
                 } else {
-                    bat(/C:\Progra~2\Jenkins\workspace\PracticaTesting>C:\Progra~2\Jenkins\tools\hudson.tasks.Maven_MavenInstallation\M3\bin\mvn -f tic-tac-toe-enunciado\pom.xml test/)
+                    bat(/cd C:\Progra~2\Jenkins\workspace\PracticaTesting>C:\Progra~2\Jenkins\tools\hudson.tasks.Maven_MavenInstallation\M3\bin\mvn -f tic-tac-toe-enunciado\pom.xml test/)
                 }
             }
           }
