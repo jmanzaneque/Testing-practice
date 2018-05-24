@@ -7,8 +7,6 @@ pipeline {
        stage("Preparation") {
             steps {
                 git 'https://github.com/jmanzaneque/Testing-practice.git'
-                
-                
             }
        }
        stage("Test") {
@@ -17,7 +15,8 @@ pipeline {
                 if(isUnix()) {
                     sh "cd tic-tac-toe-enunciado ; mvn test"
                 } else {
-                    call (/${M2_HOME}\bin\mvn install -f tic-tac-toe-enunciado\pom.xml test/)
+                    call mvn install
+                    bat (/${M2_HOME}\bin\mvn -f tic-tac-toe-enunciado\pom.xml test/)
                 }
             }
           }
