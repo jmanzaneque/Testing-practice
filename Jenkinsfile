@@ -7,7 +7,9 @@ pipeline {
        stage("Preparation") {
             steps {
                 git 'https://github.com/jmanzaneque/Testing-practice.git'
-                bat "mvn clean install"
+                withMaven(...){
+                  bat "mvn clean install"
+                }
             }
        }
        stage("Test") {
